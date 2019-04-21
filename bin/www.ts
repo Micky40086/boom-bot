@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+import app from '../src/app';
 var debug = require('debug')('boom-bot:server');
 var http = require('http');
 
