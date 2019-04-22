@@ -1,4 +1,4 @@
-import createError from 'http-errors'
+import * as createError from 'http-errors'
 import * as express from 'express'
 import * as path from 'path'
 import * as cookieParser from 'cookie-parser'
@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 })
 
 // error handler
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message

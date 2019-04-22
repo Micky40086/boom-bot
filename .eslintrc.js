@@ -2,7 +2,8 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     extends: [
         'standard',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended',
     ],
     rules: {
         "indent": "off",
@@ -11,5 +12,12 @@ module.exports = {
             "allowExpressions": true,
             "allowTypedFunctionExpressions": true
         }],
+        "prettier/prettier": [
+            "error",
+            {
+              "singleQuote": true,
+              "semi": false
+            }
+        ],
     }
 };
