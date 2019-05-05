@@ -8,7 +8,7 @@ const pool = mysql.createPool({
   database: 'boom_bot'
 })
 
-export const query = (sql, values = []): Promise<mysql.Types> => {
+export const query = (sql: string, values: any[] = []): Promise<any> => {
   return new Promise((resolve, reject) => {
     pool.getConnection(function(err, connection) {
       if (err) {

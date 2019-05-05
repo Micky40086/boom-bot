@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { query } from '../../config/mysql'
+import { query } from '../../db/mysql'
 
 const router: Router = Router()
 
