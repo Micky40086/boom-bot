@@ -3,7 +3,7 @@ module.exports = {
     extends: [
         'standard',
         'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended',
+        // 'plugin:prettier/recommended',
     ],
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
@@ -16,12 +16,12 @@ module.exports = {
             "allowExpressions": true,
             "allowTypedFunctionExpressions": true
         }],
-        "prettier/prettier": [
-            "error",
-            {
-              "singleQuote": true,
-              "semi": false
-            }
-        ],
+        // "prettier/prettier": [
+        //     "error",
+        //     {
+        //       "singleQuote": true,
+        //       "semi": false
+        //     }
+        // ],
     }
 };

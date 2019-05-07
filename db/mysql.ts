@@ -10,7 +10,7 @@ const pool = mysql.createPool({
 
 export const query = (sql: string, values: any[] = []): Promise<any> => {
   return new Promise((resolve, reject) => {
-    pool.getConnection(function(err, connection) {
+    pool.getConnection(function (err, connection) {
       if (err) {
         reject(err)
       } else {

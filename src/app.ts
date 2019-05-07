@@ -4,6 +4,7 @@ import * as path from 'path'
 import * as cookieParser from 'cookie-parser'
 import * as logger from 'morgan'
 import lineRouter from './routes/lineRouter'
+import pttRouter from './routes/pttRouter'
 
 const app = express()
 
@@ -14,6 +15,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.get('/favicon.ico', (req, res) => res.status(204))
 app.use('/callback', lineRouter)
+app.use('/ptt', pttRouter)
 
 // catch 404 and forward to error handler
 app.use((_req, _res, next) => {
