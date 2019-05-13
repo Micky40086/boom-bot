@@ -1,5 +1,10 @@
-import * as puppeteer from 'puppeteer'
+import axios from 'axios'
 import * as cheerio from 'cheerio'
+import * as line from '@line/bot-sdk'
+import * as lineTemplates from '../line/templates'
+import { pushApi } from '../line/push'
+import { chunk } from 'lodash'
+import { query } from '../../../db/mysql'
 
 interface PttPostObject {
   title: string;
@@ -18,17 +23,54 @@ const filterNewPosts = (html, time): PttPostObject[] => {
   return newPosts
 }
 
-export const crawler = async (): Promise<void> => {
+const createMessageList = (newPosts): line.Message[] => {
+  const messageList: line.Message[] = []
+  newPosts.forEach((item) => {
+    messageList.push(
+      lineTemplates.textMessageTemplate(
+        `${item.title} \n https://www.ptt.cc${item.href}`
+      )
+    )
+  })
+  return messageList
+}
+
+const sendNewPostsToUsers = (newPosts, users: string[]): void => {
+  const messageList = createMessageList(newPosts)
+  const messageListLength = messageList.length
+  if (messageListLength > 0) {
+    if (messageListLength > 5) {
+      chunk(messageList, 5).forEach((item) => {
+        users.forEach((user) => {
+          pushApi(user, item)
+        })
+      })
+    } else {
+      users.forEach((user) => {
+        pushApi(user, messageList)
+      })
+    }
+  }
+}
+
+const crawler = (board): Promise<PttPostObject[]> => {
   const currentTime = Math.floor(new Date().getTime() / 1000)
-  const browser = await puppeteer.launch({ headless: false })
-  const page = await browser.newPage()
-  await page.goto('https://www.ptt.cc/bbs/LoL/index.html')
-  const html = await page.content()
-  let newPosts = filterNewPosts(html, currentTime)
-  console.log(newPosts)
-  // await page.evaluate(() => {
-  //   let element = document.querySelectorAll('a.btn.wide')[1] as HTMLElement
-  //   element.click()
-  // })
-  // console.log(selector)
+  return axios.get(`https://www.ptt.cc/bbs/${board}/index.html`, {
+    headers: {
+      Cookie: 'over18=1;'
+    }
+  }).then((res) => {
+    return filterNewPosts(res.data, currentTime)
+  }).catch((err) => {
+    console.log(`${board} crawler error`, err)
+    return []
+  })
+}
+
+export const runPtt = async (): Promise<void> => {
+  const pttList = await query('SELECT R.ptt_board, GROUP_CONCAT(R.user_id) AS subscribers FROM ptt_relations AS R INNER JOIN ptt_boards ON ptt_board = name GROUP BY R.ptt_board;')
+  pttList.forEach(async (item) => {
+    const newPosts = await crawler(item.ptt_board)
+    sendNewPostsToUsers(newPosts, item.subscribers.split(','))
+  })
 }

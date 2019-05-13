@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express'
-import { crawler } from '../api/ptt/crawler'
+import { runPtt } from '../api/ptt/crawler'
 
 const router: Router = Router()
 
 router.get('/publish', (_req: Request, res: Response) => {
-  crawler()
+  runPtt()
   res.sendStatus(200)
 })
 
