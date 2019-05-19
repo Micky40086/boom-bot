@@ -3,13 +3,15 @@
     "module": "commonjs",
     "target": "es6",
     "lib": ["es2015","dom"],
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
     "config/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

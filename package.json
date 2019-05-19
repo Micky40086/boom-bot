@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --watch src/ --exec ts-node ./src/app -e ts"
+    "start": "nodemon --watch src/ --exec ts-node ./src/app -e ts",
+    "production": "node ./dist/src/app"
   },
   "dependencies": {
     "@line/bot-sdk": "^6.7.0",
