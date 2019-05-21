@@ -2,6 +2,7 @@ import { replyApi } from './reply'
 import * as line from '@line/bot-sdk'
 import { ensureUserExist } from './user'
 import { subscribePtt, unsubscribePtt } from './ptt'
+import { subscribeInstagram, unsubscribeInstagram } from './instagram'
 
 const handleText = async (
   message: line.TextMessage,
@@ -16,6 +17,12 @@ const handleText = async (
   } else if (/^unsubscribe ptt \S+$/.test(message.text)) {
     const board = message.text.split(' ')[2]
     replyMessage = await unsubscribePtt(board.toLowerCase(), sourceId)
+  } else if (/^subscribe instagram \S+$/.test(message.text)) {
+    const board = message.text.split(' ')[2]
+    replyMessage = await subscribeInstagram(board.toLowerCase(), sourceId)
+  } else if (/^unsubscribe instagram \S+$/.test(message.text)) {
+    const board = message.text.split(' ')[2]
+    replyMessage = await unsubscribeInstagram(board.toLowerCase(), sourceId)
   }
 
   // if (/^subscribe ig \S+$/.test(message.text)) {
