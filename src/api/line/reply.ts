@@ -9,8 +9,9 @@ export const replyApi = (
   userId: string,
   message: line.Message | line.Message[]
 ): void => {
-  client.replyMessage(userId, message).catch(err => {
-    // console.log(err)
-    // console.log('replyApi 沒有回傳值')
-  })
+  if (message) {
+    client.replyMessage(userId, message).catch(err => {
+      console.log('ReplyApi', err)
+    })
+  }
 }

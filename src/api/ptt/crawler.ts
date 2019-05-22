@@ -53,14 +53,13 @@ const sendNewPostsToUsers = (newPosts, users: string[]): void => {
   }
 }
 
-const crawler = (board): Promise<PttPostObject[]> => {
-  const currentTime = Math.floor(new Date().getTime() / 1000)
+const crawler = (timestamp, board): Promise<PttPostObject[]> => {
   return axios.get(`https://www.ptt.cc/bbs/${board}/index.html`, {
     headers: {
       Cookie: 'over18=1;'
     }
   }).then((res) => {
-    return filterNewPosts(res.data, currentTime)
+    return filterNewPosts(res.data, timestamp)
   }).catch((err) => {
     console.log(`${board} crawler error`, err)
     return []
@@ -68,9 +67,10 @@ const crawler = (board): Promise<PttPostObject[]> => {
 }
 
 export const runPtt = async (): Promise<void> => {
+  const currentTime = Math.floor(new Date().getTime() / 1000)
   const pttList = await query('SELECT R.ptt_board, GROUP_CONCAT(R.user_id) AS subscribers FROM ptt_relations AS R INNER JOIN ptt_boards ON ptt_board = name GROUP BY R.ptt_board;')
   pttList.forEach(async (item) => {
-    const newPosts = await crawler(item.ptt_board)
+    const newPosts = await crawler(currentTime, item.ptt_board)
     sendNewPostsToUsers(newPosts, item.subscribers.split(','))
   })
 }
