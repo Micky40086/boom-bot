@@ -111,7 +111,7 @@ const createMessageList = (newPosts: string[]): Promise<line.Message[]> => {
     .then((result) => {
       const messageList = result.reduce((accumulator, currentValue) => {
         return accumulator.concat(currentValue)
-      })
+      }, [])
       return messageList
     })
     .catch((err) => {
